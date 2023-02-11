@@ -19,7 +19,7 @@ public class User {
     private Integer id;
     @Column(name = "user_name")
     private String userName;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Event> eventList;
 
     public User() {

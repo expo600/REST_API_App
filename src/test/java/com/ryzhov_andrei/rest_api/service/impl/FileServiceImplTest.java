@@ -18,4 +18,7 @@ public class FileServiceImplTest extends TestCase {
 
     public void testDeleteById() {
     }
+
+    public void testUploadFile() {
+    }
 }

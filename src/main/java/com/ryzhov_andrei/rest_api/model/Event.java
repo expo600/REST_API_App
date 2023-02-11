@@ -17,10 +17,10 @@ public class Event {
     @Column(name = "id")
     private Integer id;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id")
     private User user;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "file_id", referencedColumnName = "id")
+    @JoinColumn(name = "file_id")
     private File file;
 
     public Event() {

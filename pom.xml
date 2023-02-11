@@ -9,7 +9,6 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-
         <servlet.api.version>2.5</servlet.api.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -20,7 +19,6 @@
         <junit.connector.version>4.13.2</junit.connector.version>
         <mockito.connector.version>4.10.0</mockito.connector.version>
         <gson.version>2.10.1</gson.version>
-
     </properties>
 
 
@@ -77,11 +75,35 @@
             <artifactId>gson</artifactId>
             <version>${gson.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>9.0.63</version>
+        </dependency>
 
     </dependencies>
 
     <build>
-        <finalName>REST_API_App</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>9.8.1</version>
+                <configuration>
+                    <url>jdbc:mysql://localhost:3306/rest_api_db</url>
+                    <user>root</user>
+                    <password>1234</password>
+                    <locations>
+                        <location>filesystem:C:\Users\Андрей\IdeaProjects\REST_API_App\src\main\resources\db.migration</location>
+                    </locations>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+            </plugin>
+        </plugins>
     </build>
 
 </project>

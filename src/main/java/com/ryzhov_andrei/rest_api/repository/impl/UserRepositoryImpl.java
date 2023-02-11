@@ -27,9 +27,10 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public List<User> getAll() {
+        String hql = "Select distinct user from User user left join fetch user.eventList order by user.id asc ";
         List<User> userList = new ArrayList<>();
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            userList = session.createQuery("FROM User", User.class).list();
+            userList = session.createQuery(hql, User.class).list();
         } catch (HibernateException e) {
             e.printStackTrace();
         }

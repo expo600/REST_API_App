@@ -1,62 +1,67 @@
 package com.ryzhov_andrei.rest_api.controllers;
 
-import com.ryzhov_andrei.rest_api.model.User;
-import com.ryzhov_andrei.rest_api.service.impl.UserServiceImpl;
+import com.google.gson.Gson;
+import com.ryzhov_andrei.rest_api.model.File;
+import com.ryzhov_andrei.rest_api.service.impl.FileServiceImpl;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.util.List;
 
-//@WebServlet("/users")
-public class UserServlet extends HttpServlet {
+@WebServlet("/files")
+public class FileRestControllerV1 extends HttpServlet {
 
-    private final UserServiceImpl userServiceImpl = new UserServiceImpl();
+    private final FileServiceImpl fileServiceImpl = new FileServiceImpl();
+    private final Gson GSON = new Gson();
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<User> userList = userServiceImpl.getAll();
+        List<File> fileList = fileServiceImpl.getAll();
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        out.print(userList.toString());
+        out.print(fileList.toString());
         out.flush();
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user = new User();
-        user.setUserName(request.getParameter("user_name"));
-        userServiceImpl.create(user);
+        File file = GSON.fromJson((Reader) request, File.class);
+        fileServiceImpl.create(file);
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        out.print("Save user ...");
+        out.print("Save file ...");
         out.flush();
-        response.sendRedirect("/users");
+        response.sendRedirect("/files");
+
     }
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user = new User();
-        user.setId(Integer.valueOf(request.getParameter("id")));
-        user.setUserName(request.getParameter("user_name"));
-        userServiceImpl.update(user);
+        File file = GSON.fromJson((Reader) request, File.class);
+        fileServiceImpl.update(file);
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        out.print("Update user ...");
+        out.print("Update file ...");
         out.flush();
+        response.sendRedirect("/files");
     }
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer id = Integer.valueOf(request.getParameter("id"));
-        userServiceImpl.deleteById(id);
+        // Integer id = Integer.valueOf(request.getParameter("id"));
+        File file = GSON.fromJson((Reader) request, File.class);
+        fileServiceImpl.deleteById(file.getId());
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        out.print("Delete user ...");
+        out.print("Delete file ...");
         out.flush();
-        response.sendRedirect("/users");
+        response.sendRedirect("/files");
     }
 }
