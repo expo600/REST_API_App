@@ -5,6 +5,8 @@ import com.ryzhov_andrei.rest_api.model.File;
 import com.ryzhov_andrei.rest_api.model.User;
 import org.flywaydb.core.Flyway;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
@@ -13,46 +15,20 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class HibernateUtil {
-    private static SessionFactory sessionFactory = null;
-
-    private HibernateUtil() {
-    }
+    private static SessionFactory sessionFactory;
 
     static {
-        Properties properties = new Properties();
-
+        final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+                .configure()
+                .build();
         try {
-            properties.load(new FileInputStream("src/main/resources/application.properties"));
-        } catch (IOException e) {
-            e.printStackTrace();
+            sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
         }
-
-        Flyway flyway = Flyway.configure().dataSource(properties.getProperty("url"),
-                properties.getProperty("username"),
-                properties.getProperty("password")).load();
-        flyway.baseline();
-        flyway.migrate();
+        catch (Exception e) {
+            StandardServiceRegistryBuilder.destroy( registry );
+        }
     }
-
     public static SessionFactory getSessionFactory() {
-        if (sessionFactory == null) {
-            try {
-                Configuration configuration = new Configuration().configure();
-
-                StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-                        .applySettings(configuration.getProperties());
-
-                configuration.addAnnotatedClass(Event.class);
-                configuration.addAnnotatedClass(File.class);
-                configuration.addAnnotatedClass(User.class);
-
-                sessionFactory = configuration.buildSessionFactory(builder.build());
-
-            } catch (Exception e) {
-                System.out.println("Initial SessionFactory creation failed ... " + e);
-            }
-
-        }
         return sessionFactory;
     }
 }

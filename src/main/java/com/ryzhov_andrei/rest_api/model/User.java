@@ -25,7 +25,7 @@ public class User {
     public User() {
     }
 
-    public User(Integer id,String name) {
+    public User(Integer id, String name) {
         this.id = id;
         this.userName = name;
     }
@@ -39,9 +39,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userId=" + id +
-                ", userName='" + userName + '\'' +
-                ", eventList=" + eventList +
-                '}';
+                "id=" + id +
+                ", userName='" + userName +"'}";
     }
 }
