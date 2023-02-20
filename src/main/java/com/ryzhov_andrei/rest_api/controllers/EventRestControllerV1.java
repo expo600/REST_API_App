@@ -5,6 +5,7 @@ import com.ryzhov_andrei.rest_api.model.Event;
 import com.ryzhov_andrei.rest_api.model.User;
 import com.ryzhov_andrei.rest_api.service.EventService;
 import com.ryzhov_andrei.rest_api.service.impl.EventServiceImpl;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,14 +18,13 @@ import java.util.List;
 
 @WebServlet("/api/v1/events")
 public class EventRestControllerV1 extends HttpServlet {
-    private  final EventService eventService = new EventServiceImpl();
+    private final EventService eventService = new EventServiceImpl();
     private final Gson GSON = new Gson();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //      Integer id = Integer.parseInt(request.getParameter("id"));
         Event event = GSON.fromJson(request.getReader(), Event.class);
-        final Integer id = event.getId();
+        Integer id = event.getId();
         if (id == 0) {
             List<Event> eventList = eventService.getAll();
             response.setContentType("application/json");
@@ -32,7 +32,7 @@ public class EventRestControllerV1 extends HttpServlet {
             out.print(eventList);
             out.flush();
         } else {
-            Event e  = eventService.getById(id);
+            Event e = eventService.getById(id);
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
             out.print(e);
@@ -41,8 +41,18 @@ public class EventRestControllerV1 extends HttpServlet {
     }
 
     @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Event event = GSON.fromJson(request.getReader(), Event.class);
+        eventService.create(event);
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        out.print("Save user ...");
+        out.flush();
+    }
+
+    @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Event event  = GSON.fromJson(request.getReader(), Event.class);
+        Event event = GSON.fromJson(request.getReader(), Event.class);
         eventService.update(event);
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();

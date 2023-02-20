@@ -19,7 +19,7 @@ public class User {
     private Integer id;
     @Column(name = "user_name")
     private String userName;
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Event> eventList;
 
     public User() {
@@ -30,6 +30,10 @@ public class User {
         this.userName = name;
     }
 
+    public User(String userName) {
+        this.userName = userName;
+    }
+
     public User(Integer id, String name, List<Event> events) {
         this.id = id;
         this.userName = name;
@@ -38,8 +42,8 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", userName='" + userName +"'}";
+        return "{" +
+                "\"id\":" + id +
+                ", \"userName\":" + "\"" + userName + "\"" + "}";
     }
 }

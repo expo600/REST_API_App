@@ -1,11 +1,13 @@
 package com.ryzhov_andrei.rest_api.repository.impl;
 
+import com.ryzhov_andrei.rest_api.model.Event;
 import com.ryzhov_andrei.rest_api.repository.EventRepository;
 import com.ryzhov_andrei.rest_api.utils.HibernateUtil;
-import com.ryzhov_andrei.rest_api.model.Event;
 import org.hibernate.HibernateException;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +31,7 @@ public class EventRepositoryImpl implements EventRepository {
     public List<Event> getAll() {
         List<Event> eventList = new ArrayList<>();
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            eventList = session.createQuery("FROM Event", Event.class).list();
+            eventList = session.createQuery("FROM Event ORDER BY id", Event.class).list();
         } catch (HibernateException e) {
             e.printStackTrace();
         }
@@ -53,7 +55,17 @@ public class EventRepositoryImpl implements EventRepository {
     public Event update(Event event) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.update(event);
+//        session.update(event);
+//            Event eventResult = (Event) session.merge(event);
+            String hql = "Update Event "
+                    + "SET user.id = :userId "
+                    + ", file.id  = :fileId "
+                    + " where id = :eventId";
+            session.createQuery(hql)
+                    .setParameter("eventId", event.getId())
+                    .setParameter("userId", event.getUser().getId())
+                    .setParameter("fileId", event.getFile().getId())
+                    .executeUpdate();
             transaction.commit();
         } catch (HibernateException e) {
             transaction.rollback();
@@ -66,8 +78,9 @@ public class EventRepositoryImpl implements EventRepository {
     public void deleteById(Integer id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            Event event = session.get(Event.class, id);
-            session.delete(event);
+            session.createQuery("DELETE FROM Event WHERE id = :param")
+                    .setParameter("param", id)
+                    .executeUpdate();
             transaction.commit();
         } catch (HibernateException e) {
             transaction.rollback();

@@ -24,6 +24,11 @@ public class File {
     public File() {
     }
 
+    public File(String fileName, String filePath) {
+        this.fileName = fileName;
+        this.filePath = filePath;
+    }
+
     public File(Integer id, String fileName, String filePath) {
         this.id = id;
         this.fileName = fileName;
@@ -32,10 +37,9 @@ public class File {
 
     @Override
     public String toString() {
-        return "File{" +
-                "id=" + id +
-                ", fileName='" + fileName + '\'' +
-                ", filePath='" + filePath + '\'' +
-                '}';
+        return "{" + "\"id\":" + id +
+                ", \"fileName\":" + "\"" + fileName + "\"" +
+                ", \"filePath\":" + "\"" + filePath + "\"" +
+                "}";
     }
 }

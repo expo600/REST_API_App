@@ -22,9 +22,8 @@ public class UserRestControllerV1 extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//      Integer id = Integer.parseInt(request.getParameter("id"));
         User user = GSON.fromJson(request.getReader(), User.class);
-        final Integer id = user.getId();
+        Integer id = user.getId();
         if (id == 0) {
             List<User> userList = userService.getAll();
             response.setContentType("application/json");

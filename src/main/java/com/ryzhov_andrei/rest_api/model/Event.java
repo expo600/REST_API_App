@@ -26,6 +26,11 @@ public class Event {
     public Event() {
     }
 
+    public Event(User user, File file) {
+        this.user = user;
+        this.file = file;
+    }
+
     public Event(Integer id, User user, File file) {
         this.id = id;
         this.user = user;
@@ -34,10 +39,9 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event{" +
-                "id=" + id +
-                ", user=" + user +
-                ", file=" + file +
-                '}';
+        return "{" + "\"id\":" + id +
+                ", \"user\":" + user +
+                ", \"file\":" + file +
+                "}";
     }
 }

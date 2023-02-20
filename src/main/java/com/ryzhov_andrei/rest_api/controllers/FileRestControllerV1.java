@@ -21,9 +21,8 @@ public class FileRestControllerV1 extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//         Integer id = Integer.parseInt(request.getParameter("id"));
         File file = GSON.fromJson(request.getReader(), File.class);
-        final Integer id = file.getId();
+        Integer id = file.getId();
         if (id == 0) {
             List<File> fileList = fileService.getAll();
             response.setContentType("application/json");
