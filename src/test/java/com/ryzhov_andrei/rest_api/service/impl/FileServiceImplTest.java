@@ -3,7 +3,9 @@ package com.ryzhov_andrei.rest_api.service.impl;
 import com.ryzhov_andrei.rest_api.model.File;
 import com.ryzhov_andrei.rest_api.repository.FileRepository;
 import com.ryzhov_andrei.rest_api.repository.impl.FileRepositoryImpl;
+import com.ryzhov_andrei.rest_api.service.EventService;
 import com.ryzhov_andrei.rest_api.service.FileService;
+import com.ryzhov_andrei.rest_api.service.UserService;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,9 +21,10 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FileServiceImplTest extends TestCase {
-
+private EventService eventService = Mockito.mock(EventServiceImpl.class);
+    private UserService userService = Mockito.mock(UserServiceImpl.class);
     private FileRepository fileRepository = Mockito.mock(FileRepositoryImpl.class);
-    private FileService serviceUnderTest = new FileServiceImpl(fileRepository);
+    private FileService serviceUnderTest = new FileServiceImpl(userService, eventService, fileRepository);
 
     private List<File> getFiles() {
         return List.of(

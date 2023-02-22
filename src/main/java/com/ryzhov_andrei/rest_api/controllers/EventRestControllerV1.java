@@ -41,16 +41,6 @@ public class EventRestControllerV1 extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Event event = GSON.fromJson(request.getReader(), Event.class);
-        eventService.create(event);
-        response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
-        out.print("Save user ...");
-        out.flush();
-    }
-
-    @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Event event = GSON.fromJson(request.getReader(), Event.class);
         eventService.update(event);
@@ -62,7 +52,6 @@ public class EventRestControllerV1 extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//      Integer id = Integer.parseInt(request.getParameter("id"));
         Event event = GSON.fromJson(request.getReader(), Event.class);
         eventService.deleteById(event.getId());
         response.setContentType("application/json");
